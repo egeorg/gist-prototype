@@ -18,7 +18,7 @@ include_directories(${PROJECT_SOURCE_DIR}/third_party/)
 add_executable(benchmark ${BENCHMARK_SOURCES} ${GIST_SOURCES})
 target_link_libraries(benchmark)
 
-add_executable(test0 ${TEST_SOURCES})
-target_link_libraries(test0 -pthread -lgtest -lgtest_main)
+add_executable(gist_tests ${TEST_SOURCES})
+target_link_libraries(gist_tests -lgtest -lgtest_main)
 
-add_test(test0 test)
+add_test(NAME run_gist_tests COMMAND gist_tests)

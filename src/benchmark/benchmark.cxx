@@ -1,13 +1,11 @@
 #include "benchmark/benchmark.h"
 
 #include <thread>
-#include <vector>
-#include <chrono>
 
 #include "easylogging++.h"
 #include "timer.h"
 
-Benchmark::Benchmark(Type type, const unsigned int thread_count) {
+Benchmark::Benchmark(Type type, const uint32_t thread_count) {
     type_ = type;
     switch (type_) {
         case Type::B_TREE_BENCHMARK:
@@ -22,6 +20,7 @@ Benchmark::Benchmark(Type type, const unsigned int thread_count) {
             LOG(FATAL) << "Benchmark: Unknown tree type.";
     }
     thread_count_ = thread_count;
+    rng.seed(kRngSeed);
 }
 
 Benchmark::~Benchmark() {
@@ -32,7 +31,7 @@ Benchmark::~Benchmark() {
 
 void Benchmark::Run() {
     CHECK_EQ(state_, State::IDLE) << BENCHMARK_ERROR << "Wrong state on Run()";
-    LOG(INFO) << "Benchmark: Running";
+    LOG(INFO) << "Benchmark: Running " << sizeof(kDataCharacters);
     Populate();
     Measure();
 }
@@ -42,7 +41,7 @@ void Benchmark::Populate() {
     LOG(INFO) << "Benchmark: Populating";
     state_ = State::POPULATING;
     std::vector<std::thread> threads;
-    for (unsigned int i = 0; i < thread_count_; i++) {
+    for (uint32_t i = 0; i < thread_count_; i++) {
         threads.push_back(std::thread(&Benchmark::PopulationThreadFunction, this));
     }
     for (auto& thread : threads) {
@@ -56,7 +55,7 @@ void Benchmark::Measure() {
     LOG(INFO) << "Benchmark: Measuring";
     state_ = State::MEASURING;
     std::vector<std::thread> threads;
-    for (unsigned int i = 0; i < thread_count_; i++) {
+    for (uint32_t i = 0; i < thread_count_; i++) {
         threads.push_back(std::thread(&Benchmark::MeasurementThreadFunction, this));
     }
     std::this_thread::sleep_for(std::chrono::seconds(kMeasureTime));
@@ -81,11 +80,31 @@ void Benchmark::MeasurementThreadFunction() {
 }
 
 Predicate* Benchmark::GeneratePredicate() {
+    switch (type_) {
+        case Type::B_TREE_BENCHMARK:
+            // Interval* interval;
+            // TODO: generate random Interval
+            // LOG(INFO) << "Benchmark: B+ Tree Interval generated.";
+            // return interval;
+            break;
+        case Type::R_TREE_BENCHMARK:
+            // Rectangle* rectangle;
+            // TODO: generate random Rectangle
+            // return rectangle
+            // LOG(INFO) << "Benchmark: R Tree Rectangle generated.";
+            break;
+        default:
+            LOG(FATAL) << "Benchmark: Unknown tree type.";
+    }
     return nullptr;
-    // TODO
 }
 
 char* Benchmark::GenerateData() {
-    return nullptr;
+    char *result = new char[kDataLength + 1];
+    for (uint32_t i = 0; i < kDataLength; ++i) {
+        result[i] = kDataCharacters[data_distribution(rng)];
+    }
+    result[kDataLength] = 0;
+    return result;
     // TODO
 }
