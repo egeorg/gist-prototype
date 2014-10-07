@@ -20,8 +20,8 @@ public:
 private:
     enum State {IDLE, POPULATING, READY, MEASURING, FINISHED};
 
-    Predicate* GeneratePredicate();
-    char* GenerateData();
+    Predicate *GeneratePredicate();
+    char *GenerateData();
     void PopulationThreadFunction();
     void MeasurementThreadFunction();
     void Populate();
@@ -34,12 +34,10 @@ private:
 
     Type type_ = Type::NONE;
     State state_ = State::IDLE;
-    Gist* gist_ = nullptr;
+    Gist *gist_ = nullptr;
     uint32_t thread_count_ = 0;
     std::mt19937 rng;
-    std::uniform_int_distribution<uint32_t> data_distribution{
-            std::uniform_int_distribution<uint32_t>(0, (sizeof(kDataCharacters) / sizeof(char)) - 1)
-    };
+    std::uniform_int_distribution<uint32_t> data_distribution{std::uniform_int_distribution<uint32_t>(0, (sizeof(kDataCharacters) / sizeof(char)) - 1)};
 };
 
 #endif  // GIST_BENCHMARK_BENCHMARK_H_

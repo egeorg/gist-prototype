@@ -4,7 +4,7 @@
 
 _INITIALIZE_EASYLOGGINGPP
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     el::Configurations conf("../log.conf");
     el::Loggers::reconfigureAllLoggers(conf);
 

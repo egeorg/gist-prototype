@@ -8,15 +8,15 @@ Gist::~Gist() {
     // TODO
 }
 
-std::vector<Entry*>* Gist::Search(Predicate* p) {
+std::vector<Entry *> *Gist::Search(Predicate *p) {
     // TODO
     return nullptr;
 }
 
-void Gist::Insert(Entry* e) {
+void Gist::Insert(Entry *e) {
     // TODO
 }
 
-void Gist::Delete(Entry* e) {
+void Gist::Delete(Entry *e) {
     // TODO
 }
