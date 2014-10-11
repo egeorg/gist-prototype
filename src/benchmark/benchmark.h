@@ -2,7 +2,6 @@
 #define GIST_BENCHMARK_BENCHMARK_H_
 
 #include <random>
-#include <cygwin/stat.h>
 
 #include "gist/gist.h"
 #include "gist/predicate.h"
