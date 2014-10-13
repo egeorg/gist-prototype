@@ -2,21 +2,23 @@
 
 Gist::Gist() {
     // TODO
+    char const *str = "abc";
+
 }
 
 Gist::~Gist() {
     // TODO
 }
 
-std::vector<Entry *> *Gist::Search(Predicate *p) {
+std::vector<Gist::Entry *> *Gist::Search(Predicate *p) const {
     // TODO
     return nullptr;
 }
 
-void Gist::Insert(Entry *e) {
+void Gist::Insert(Gist::Entry *e) {
     // TODO
 }
 
-void Gist::Delete(Entry *e) {
+void Gist::Delete(Gist::Entry *e) {
     // TODO
 }
