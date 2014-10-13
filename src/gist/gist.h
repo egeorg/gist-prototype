@@ -3,24 +3,34 @@
 
 #include <vector>
 
-#include "gist/entry.h"
 #include "gist/predicate.h"
 
 class Gist {
+    class Entry {
+    private:
+        Entry* leftChild;
+        Entry* rightBrother;
+        Predicate predicate;
+
+        Predicate getPredicate() const {
+            return predicate;
+        }
+
+        void setPredicate(Predicate &p) {
+            predicate = p;
+        }
+    };
+
 public:
     Gist();
     ~Gist();
-    std::vector<Entry *> *Search(Predicate *p);
+    std::vector<Entry *> *Search(Predicate *p) const;
     void Insert(Entry *e);
     void Delete(Entry *e);
 
 protected:
-    virtual bool Consistent(Entry *e, Predicate *q) = 0;
-    virtual Predicate *Union(const std::vector<Entry *> &p) = 0;
-    virtual Entry *Compress(Entry *e) = 0;
-    virtual Entry *Decompress(Entry *e) = 0;
-    virtual double Penalty(Entry *e1, Entry *e2) = 0;
-    virtual bool PickSplit(const std::vector<Entry *> &p) = 0;
+    virtual double Penalty(Entry *e1, Entry *e2) const = 0;
+    virtual bool PickSplit(const std::vector<Entry *> &p) const = 0;
 };
 
 #endif  // GIST_GIST_GIST_H_
