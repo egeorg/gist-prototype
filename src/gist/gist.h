@@ -1,11 +1,10 @@
-#ifndef GIST_GIST_GIST_H_
-#define GIST_GIST_GIST_H_
+#pragma once
 
 #include <vector>
 
 #include "gist/predicate.h"
-#include "Entry.h"
-#include "Node.h"
+#include "gist/entry.h"
+#include "gist/node.h"
 
 // TODO: InnerEntry, LeafEntry
 // Разделение на Node, Entry
@@ -28,5 +27,5 @@ public:
     void deleteEntry(const Entry<P> &e);
 };
 
+// this is not good..
 #include "gist/gist.cxx"
-#endif

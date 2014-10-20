@@ -1,5 +1,4 @@
-#ifndef GIST_BENCHMARK_BENCHMARK_H_
-#define GIST_BENCHMARK_BENCHMARK_H_
+#pragma once
 
 #include <random>
 
@@ -40,6 +39,5 @@ private:
     std::uniform_int_distribution<uint32_t> data_distribution{std::uniform_int_distribution<uint32_t>(0, (sizeof(kDataCharacters) / sizeof(char)) - 1)};
 };
 
+// this is not good..
 #include "benchmark.cxx"
-
-#endif  // GIST_BENCHMARK_BENCHMARK_H_

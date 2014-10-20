@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "gist/gist.h"
 
 TEST(UnitTests, SampleTest) {

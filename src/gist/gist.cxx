@@ -1,8 +1,6 @@
-#ifndef GIST_GIST_GIST_CXX_
-#define GIST_GIST_GIST_CXX_
+#pragma once
 
 #include "gist/gist.h"
-#include <cstdio>
 
 template <typename P>
 Gist<P>::Gist(int u, int l) {
@@ -31,5 +29,3 @@ void Gist<P>::insert(Entry<P> const &e) {
 template <typename P>
 void Gist<P>::deleteEntry(Entry<P> const &e) {
 }
-
-#endif

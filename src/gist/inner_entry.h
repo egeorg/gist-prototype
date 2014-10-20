@@ -1,5 +1,7 @@
-#include "Entry.h"
-#include "Node.h"
+#pragma once
+
+#include "gist/entry.h"
+#include "gist/node.h"
 
 template <typename P>
 class InnerEntry<P> : public Entry<P> {

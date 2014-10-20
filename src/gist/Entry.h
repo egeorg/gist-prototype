@@ -1,7 +1,6 @@
-#ifndef GIST_GIST_ENTRY_H 
-#define GIST_GIST_ENTRY_H
+#pragma once
 
-#include "predicate.h"
+#include "gist/predicate.h"
 
 template <typename P>
 class Entry {
@@ -17,5 +16,3 @@ public:
         return predicate;
     }
 };
-
-#endif

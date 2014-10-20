@@ -1,5 +1,4 @@
-#ifndef GIST_BENCHMARK_BENCHMARK_CXX_
-#define GIST_BENCHMARK_BENCHMARK_CXX_
+#pragma once
 
 #include "benchmark/benchmark.h"
 
@@ -120,5 +119,3 @@ char* Benchmark<P>::GenerateData() {
     return result;
     // TODO
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef GIST_BENCHMARK_TIMER_H_
-#define GIST_BENCHMARK_TIMER_H_
+#pragma once
 
 #include <chrono>
 
@@ -23,5 +22,3 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 
 };
-
-#endif  // GIST_BENCHMARK_TIMER_H_
