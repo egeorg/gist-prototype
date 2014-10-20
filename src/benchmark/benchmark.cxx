@@ -1,3 +1,6 @@
+#ifndef GIST_BENCHMARK_BENCHMARK_CXX_
+#define GIST_BENCHMARK_BENCHMARK_CXX_
+
 #include "benchmark/benchmark.h"
 
 #include <thread>
@@ -5,7 +8,8 @@
 #include "easylogging++.h"
 #include "timer.h"
 
-Benchmark::Benchmark(Type type, const uint32_t thread_count) {
+template <typename P>
+Benchmark<P>::Benchmark(Type type, const uint32_t thread_count) {
     type_ = type;
     switch (type_) {
         case Type::B_TREE_BENCHMARK:
@@ -23,26 +27,29 @@ Benchmark::Benchmark(Type type, const uint32_t thread_count) {
     rng.seed(kRngSeed);
 }
 
-Benchmark::~Benchmark() {
+template <typename P>
+Benchmark<P>::~Benchmark() {
     if (gist_ != nullptr) {
         delete gist_;
     }
 }
 
-void Benchmark::Run() {
+template <typename P>
+void Benchmark<P>::Run() {
     CHECK_EQ(state_, State::IDLE) << BENCHMARK_ERROR << "Wrong state on Run()";
     LOG(INFO) << "Benchmark: Running ";
     Populate();
     Measure();
 }
 
-void Benchmark::Populate() {
+template <typename P>
+void Benchmark<P>::Populate() {
     CHECK_EQ(state_, State::IDLE) << BENCHMARK_ERROR << "Wrong state on Populate()";
     LOG(INFO) << "Benchmark: Populating";
     state_ = State::POPULATING;
     std::vector<std::thread> threads;
     for (uint32_t i = 0; i < thread_count_; i++) {
-        threads.push_back(std::thread(&Benchmark::PopulationThreadFunction, this));
+        threads.push_back(std::thread(&Benchmark<P>::PopulationThreadFunction, this));
     }
     for (auto &thread : threads) {
         thread.join();
@@ -50,13 +57,14 @@ void Benchmark::Populate() {
     state_ = State::READY;
 }
 
-void Benchmark::Measure() {
+template <typename P>
+void Benchmark<P>::Measure() {
     CHECK_EQ(state_, State::READY) << BENCHMARK_ERROR << "Wrong state on Measure()";
     LOG(INFO) << "Benchmark: Measuring";
     state_ = State::MEASURING;
     std::vector<std::thread> threads;
     for (uint32_t i = 0; i < thread_count_; i++) {
-        threads.push_back(std::thread(&Benchmark::MeasurementThreadFunction, this));
+        threads.push_back(std::thread(&Benchmark<P>::MeasurementThreadFunction, this));
     }
     std::this_thread::sleep_for(std::chrono::seconds(kMeasureTime));
     state_ = State::FINISHED;
@@ -65,13 +73,15 @@ void Benchmark::Measure() {
     }
 }
 
-void Benchmark::PopulationThreadFunction() {
+template <typename P>
+void Benchmark<P>::PopulationThreadFunction() {
     Timer timer;
     // TODO: populate the gist
     LOG(INFO) << "Benchmark: Population thread stopped. Running time: " << timer.Elapsed<std::chrono::milliseconds>() << " millisec.";
 }
 
-void Benchmark::MeasurementThreadFunction() {
+template <typename P>
+void Benchmark<P>::MeasurementThreadFunction() {
     Timer timer;
     while (state_ == State::MEASURING) {
         // TODO: query the qist
@@ -79,7 +89,8 @@ void Benchmark::MeasurementThreadFunction() {
     LOG(INFO) << "Benchmark: Measurement thread stopped. Running time: " << timer.Elapsed<std::chrono::milliseconds>() << " millisec.";
 }
 
-Predicate *Benchmark::GeneratePredicate() {
+template <typename P>
+P* Benchmark<P>::GeneratePredicate() {
     switch (type_) {
         case Type::B_TREE_BENCHMARK:
             // Interval* interval;
@@ -99,7 +110,8 @@ Predicate *Benchmark::GeneratePredicate() {
     return nullptr;
 }
 
-char *Benchmark::GenerateData() {
+template <typename P>
+char* Benchmark<P>::GenerateData() {
     char *result = new char[kDataLength + 1];
     for (uint32_t i = 0; i < kDataLength; ++i) {
         result[i] = kDataCharacters[data_distribution(rng)];
@@ -108,3 +120,5 @@ char *Benchmark::GenerateData() {
     return result;
     // TODO
 }
+
+#endif

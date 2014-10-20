@@ -4,33 +4,29 @@
 #include <vector>
 
 #include "gist/predicate.h"
+#include "Entry.h"
+#include "Node.h"
 
+// TODO: InnerEntry, LeafEntry
+// Разделение на Node, Entry
+// Node хранит вектор Entry
+// Параметризовать Gist<ConcretePredicate> предикатом
+
+template <typename P>
 class Gist {
-    class Entry {
-    private:
-        Entry* leftChild;
-        Entry* rightBrother;
-        Predicate predicate;
-
-        Predicate getPredicate() const {
-            return predicate;
-        }
-
-        void setPredicate(Predicate &p) {
-            predicate = p;
-        }
-    };
+private:
+    int upperBound;
+    int lowerBound;
+    Node<P> *root;
 
 public:
-    Gist();
-    ~Gist();
-    std::vector<Entry *> *Search(Predicate *p) const;
-    void Insert(Entry *e);
-    void Delete(Entry *e);
+    Gist(int upperBound, int lowerBound);
+    virtual ~Gist();
 
-protected:
-    virtual double Penalty(Entry *e1, Entry *e2) const = 0;
-    virtual bool PickSplit(const std::vector<Entry *> &p) const = 0;
+    std::vector<Entry<P> *> search(const P &p) const;
+    void insert(const Entry<P> &e);
+    void deleteEntry(const Entry<P> &e);
 };
 
-#endif  // GIST_GIST_GIST_H_
+#include "gist/gist.cxx"
+#endif
