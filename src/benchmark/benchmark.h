@@ -8,6 +8,7 @@
 
 #define BENCHMARK_ERROR "Benchmark ERROR: "
 
+template <typename P>
 class Benchmark {
 public:
     enum Type {NONE, B_TREE_BENCHMARK, R_TREE_BENCHMARK};
@@ -19,7 +20,7 @@ public:
 private:
     enum State {IDLE, POPULATING, READY, MEASURING, FINISHED};
 
-    Predicate *GeneratePredicate();
+    P *GeneratePredicate();
     char *GenerateData();
     void PopulationThreadFunction();
     void MeasurementThreadFunction();
@@ -33,10 +34,12 @@ private:
 
     Type type_ = Type::NONE;
     State state_ = State::IDLE;
-    Gist *gist_ = nullptr;
+    Gist<P> *gist_ = nullptr;
     uint32_t thread_count_ = 0;
     std::mt19937 rng;
     std::uniform_int_distribution<uint32_t> data_distribution{std::uniform_int_distribution<uint32_t>(0, (sizeof(kDataCharacters) / sizeof(char)) - 1)};
 };
+
+#include "benchmark.cxx"
 
 #endif  // GIST_BENCHMARK_BENCHMARK_H_

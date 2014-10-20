@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
     el::Configurations conf("../log.conf");
     el::Loggers::reconfigureAllLoggers(conf);
 
-    Benchmark benchmark(Benchmark::Type::B_TREE_BENCHMARK, 4);
+    Benchmark<int> benchmark(Benchmark<int>::Type::B_TREE_BENCHMARK, 4);
     benchmark.Run();
 
     return 0;
