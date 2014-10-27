@@ -1,7 +1,6 @@
 #pragma once
 
 #include "gist/predicate.h"
-//#include "gist/leaf_entry.h"
 
 template <typename P>
 class Entry {
@@ -13,7 +12,7 @@ public:
         Entry::predicate = predicate;
     }
 
-    //virtual std::vector<LeafEntry<P> *> find(P const &predicate);  
+    virtual std::vector<Entry<P> *> getChildren() = 0;
 
     P getPredicate() const {
         return predicate;

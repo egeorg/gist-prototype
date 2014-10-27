@@ -4,6 +4,7 @@
 
 #include "gist/predicate.h"
 #include "gist/inner_entry.h"
+#include "gist/leaf_entry.h"
 //#include "gist/node.h"
 
 template <typename P>

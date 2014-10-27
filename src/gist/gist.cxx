@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gist/gist.h"
+#include <stack>
 
 template <typename P>
 Gist<P>::Gist(int u, int l) {
@@ -19,7 +20,27 @@ Gist<P>::~Gist() {
 
 template <typename P>
 std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
-    return this.root.find(predicate);
+    std::vector<LeafEntry<P> *> result;
+	std::stack<Entry<P> *> entryStack;
+	entryStack.push_back(root);
+	while (!entryStack.empty()) {
+		Entry<P> *curEntry = entryStack.pop_back();
+		std::vector<Entry<P> *> children = curEntry -> getChildren();
+
+		if (children.empty()) {
+			result.push_back(curEntry);	
+			continue;
+		}
+		
+		for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
+			if (predicate.consistentWith(child -> predicate)) {
+				entryStack.push_back(child);
+			}
+
+		}
+	}
+
+	return result;
 }
 
 template <typename P>
