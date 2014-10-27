@@ -6,6 +6,6 @@
 
 template <typename P>
 class Node {
-private:
+public:
     std::vector<Entry<P> *> entries;
 };

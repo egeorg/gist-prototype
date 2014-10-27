@@ -4,22 +4,22 @@
 
 template <typename P>
 Gist<P>::Gist(int u, int l) {
-    upperBound = u;
-    lowerBound = l;
-    root = new Node<P>();
+    max_fanout = u;
+    min_fanout = l;
+    root = new InnerEntry<P>();
 }
 
 template <typename P>
 Gist<P>::~Gist() {
 	if (root != nullptr) {
+		// TODO
 		delete root;
 	}
-    // TODO
 }
 
 template <typename P>
-std::vector<Entry<P> *> Gist<P>::search(const P &p) const {
-    return std::vector<Entry<P> *>();
+std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
+    return this.root.find(predicate);
 }
 
 template <typename P>

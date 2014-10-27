@@ -3,26 +3,21 @@
 #include <vector>
 
 #include "gist/predicate.h"
-#include "gist/entry.h"
-#include "gist/node.h"
-
-// TODO: InnerEntry, LeafEntry
-// Разделение на Node, Entry
-// Node хранит вектор Entry
-// Параметризовать Gist<ConcretePredicate> предикатом
+#include "gist/inner_entry.h"
+//#include "gist/node.h"
 
 template <typename P>
 class Gist {
 private:
-    int upperBound;
-    int lowerBound;
-    Node<P> *root;
+    int max_fanout;
+    int min_fanout;
+    InnerEntry<P> *root;
 
 public:
-    Gist(int upperBound, int lowerBound);
+    Gist(int max_fanout, int min_fanout);
     virtual ~Gist();
 
-    std::vector<Entry<P> *> search(const P &p) const;
+    std::vector<LeafEntry<P> *> search(const P &p) const;
     void insert(const Entry<P> &e);
     void deleteEntry(const Entry<P> &e);
 };
