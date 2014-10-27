@@ -9,15 +9,7 @@ class LeafEntry : public Entry<P> {
 private:
     void* data;
 
-    std::vector<LeafEntry<P> *> find(P const &predicate) {
-		if (!predicate.consistentWith(this.getPredicate())) {
-			return std::vector<LeafEntry<P> *> ();
-		}
-
-		std::vector<LeafEntry<P> *> result;
-		result.push_back(this);
-
-		return result;
+    std::vector<Entry<P> *> getChildren() {
+		return std::vector<Entry<P> *> ();
 	}
-
 };
