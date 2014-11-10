@@ -8,6 +8,7 @@ class Predicate {
 public:
     Predicate(const std::vector<Predicate &> &p);
     Predicate(const std::vector<void *> &data);
+    Predicate();
     virtual ~Predicate();
 
 protected:

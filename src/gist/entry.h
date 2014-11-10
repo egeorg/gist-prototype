@@ -8,7 +8,7 @@ private:
     P predicate;
 public:
     void setPredicate(P const &predicate) {
-        Entry::predicate = predicate;
+        this->predicate = predicate;
     }
 
     virtual std::vector<Entry<P> *> getChildren() = 0;
