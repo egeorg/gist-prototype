@@ -7,5 +7,5 @@ TEST(UnitTests, SampleTest) {
 }
 
 TEST(UnitTests, CreatingGistInstance) {
-	Gist<int> g(0, 0);
+//	Gist<int> g(0, 0);
 }
