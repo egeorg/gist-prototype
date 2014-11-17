@@ -1,9 +1,10 @@
 #pragma once
 
 #include "gist/predicate.h"
+#include "gist/predicate_holder.h"
 
 template <typename P>
-class Entry {
+class Entry : public PredicateHolder {
 private:
     P predicate;
 public:
