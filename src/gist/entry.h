@@ -4,7 +4,7 @@
 #include "gist/predicate_holder.h"
 
 template <typename P>
-class Entry : public PredicateHolder {
+class Entry : public PredicateHolder<P> {
 private:
     P predicate;
 public:
