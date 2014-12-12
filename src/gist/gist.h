@@ -22,8 +22,10 @@ public:
     virtual ~Gist();
 
     std::vector<LeafEntry<P> *> search(const P &p) const;
-    void insert(Entry<P> E);
-    void deleteEntry(const Entry<P> &e);
+
+    void insert(LeafEntry<P> E);
+
+    void deleteEntry(const LeafEntry<P> &e);
 };
 
 // this is not good..

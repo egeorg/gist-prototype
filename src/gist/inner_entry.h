@@ -8,20 +8,20 @@
 template <typename P>
 class InnerEntry : public Entry<P> {
 private:
-    Node<P> node;
+    Node<P> *node;
 public:
     InnerEntry<P> () {
-        node = *(new Node<P>(std::vector<Entry<P> *>()));
-        this->predicate = *(new P());
+        node = new Node<P>(std::vector<Entry<P> *>());
+//        this->predicate = *(new P()); // TODO: Predicates should not be constructed this way
     }
 
     InnerEntry<P> (std::vector<Entry<P> *> entries) {
-        node = *(new Node<P>(entries));
+        node = new Node<P>(entries);
         this->predicate = *(new P(getSubpredicates()));
     }
 
     std::vector<Entry<P> *> getChildren() {
-        return node.getEntries();
+        return node->getEntries();
     }
 
 	std::vector<P*> getSubpredicates() {
@@ -34,12 +34,12 @@ public:
 	}
 
     void setChildren (std::vector<Entry<P> *> entries) {
-        node.setEntries(entries);
+        node->setEntries(entries);
         //predicate = *(new P(this->getSubpredicates()));
     }
 
     void insert(const Entry<P> &E) {
         E.setParent(this);
-        node.insert(E);
+        node->insert(E);
     }
 };

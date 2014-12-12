@@ -45,7 +45,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 }
 
 template <typename P>
-void Gist<P>::insert(Entry<P> E) {
+void Gist<P>::insert(LeafEntry<P> E) {
     P predicate = E.getPredicate();
     std::stack<InnerEntry<P>*> path;
 
@@ -88,5 +88,5 @@ void Gist<P>::insert(Entry<P> E) {
 }
 
 template <typename P>
-void Gist<P>::deleteEntry(Entry<P> const &e) {
+void Gist<P>::deleteEntry(LeafEntry<P> const &e) {
 }

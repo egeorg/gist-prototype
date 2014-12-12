@@ -6,15 +6,15 @@
 template <typename P>
 class Entry : public PredicateHolder<P> {
 private:
-    P predicate;
+    P *predicate;
 public:
-    void setPredicate(P const &predicate) {
+    void setPredicate(P *predicate) {
         this->predicate = predicate;
     }
 
     virtual std::vector<Entry<P> *> getChildren() = 0;
 
-    P getPredicate() const {
+    P *getPredicate() const {
         return predicate;
     }
 };

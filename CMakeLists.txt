@@ -8,9 +8,9 @@ file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/logs)
 
 enable_testing()
 
-file(GLOB GIST_SOURCES ${PROJECT_SOURCE_DIR}/src/gist/*.cxx)
-file(GLOB BENCHMARK_SOURCES ${PROJECT_SOURCE_DIR}/src/benchmark/*.cxx)
-file(GLOB TEST_SOURCES ${PROJECT_SOURCE_DIR}/src/tests/*.cxx)
+file(GLOB_RECURSE GIST_SOURCES ${PROJECT_SOURCE_DIR}/src/gist/*.cxx)
+file(GLOB_RECURSE BENCHMARK_SOURCES ${PROJECT_SOURCE_DIR}/src/benchmark/*.cxx)
+file(GLOB_RECURSE TEST_SOURCES ${PROJECT_SOURCE_DIR}/src/tests/*.cxx)
 
 include_directories(${PROJECT_SOURCE_DIR}/src/)
 include_directories(${PROJECT_SOURCE_DIR}/third_party/)
