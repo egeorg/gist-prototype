@@ -1,4 +1,5 @@
-#pragma once
+#ifndef H_GRANDFATHER
+#define H_GRANDFATHER
 
 #include "gist/gist.h"
 #include <stack>
@@ -8,6 +9,7 @@ template <typename P>
 Gist<P>::Gist(int u, int l) {
     max_fanout = u;
     min_fanout = l;
+    global_nsn = 1;
     root = new InnerEntry<P>();
 }
 
@@ -22,11 +24,17 @@ Gist<P>::~Gist() {
 template <typename P>
 std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
     std::vector<LeafEntry<P> *> result;
-	std::stack<Entry<P> *> entryStack;
-	entryStack.push(root);
+	std::stack<std::pair<Entry<P> *, int>> entryStack;
+	entryStack.push(std::make_pair(root, global_nsn));
 	while (!entryStack.empty()) {
-		Entry<P> *curEntry = entryStack.top();
+		Entry<P> *curEntry = entryStack.top().first;
+        int curNSN = entryStack.top().second;
         entryStack.pop();
+
+        if (curNSN < curEntry -> getNSN()) {
+            // add right-link with curNSN version
+        }
+
 		std::vector<Entry<P> *> children = curEntry -> getChildren();
 
 		if (children.empty()) {
@@ -34,9 +42,10 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 			continue;
 		}
 		
+        int curr_global_nsn = global_nsn;
 		for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
 			if (predicate.consistentWith((*child) -> getPredicate())) {
-				entryStack.push(*child);
+				entryStack.push(std::make_pair(*child, curr_global_nsn));
 			}
 		}
 	}
@@ -90,3 +99,4 @@ void Gist<P>::insert(LeafEntry<P> E) {
 template <typename P>
 void Gist<P>::deleteEntry(LeafEntry<P> const &e) {
 }
+#endif

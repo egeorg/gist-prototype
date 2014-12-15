@@ -12,6 +12,7 @@ class Gist {
 private:
     int max_fanout;
     int min_fanout;
+    int global_nsn;
     InnerEntry<P> *root;
 
     //InnerEntry<P> chooseSubtree(LeafEntry<P> const &E);

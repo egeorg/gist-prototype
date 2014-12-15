@@ -7,6 +7,7 @@ template <typename P>
 class Entry : public PredicateHolder<P> {
 private:
     P *predicate;
+    int nsn;
 public:
     void setPredicate(P *predicate) {
         this->predicate = predicate;
@@ -16,5 +17,9 @@ public:
 
     P *getPredicate() const {
         return predicate;
+    }
+
+    int getNSN() {
+    	return nsn;
     }
 };

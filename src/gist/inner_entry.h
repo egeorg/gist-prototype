@@ -24,14 +24,14 @@ public:
         return node->getEntries();
     }
 
-	std::vector<P*> getSubpredicates() {
-		std::vector<Entry<P> *> children = getChildren();
-		std::vector<P*> result;
-		for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
-			result.push_back((*child) -> getPredicate());
-		}
-		return result;
-	}
+    std::vector<P*> getSubpredicates() {
+        std::vector<Entry<P> *> children = getChildren();
+        std::vector<P*> result;
+        for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
+            result.push_back((*child) -> getPredicate());
+        }
+        return result;
+    }
 
     void setChildren (std::vector<Entry<P> *> entries) {
         node->setEntries(entries);
