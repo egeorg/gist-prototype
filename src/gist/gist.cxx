@@ -54,14 +54,21 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 }
 
 template <typename P>
-void Gist<P>::locateLeaf(const P &predicate, std::stack<InnerEntry<P>*> *path) {
-    for (InnerEntry<P> *curEntry = root;;) {
-        path->push(curEntry);
+void Gist<P>::locateLeaf(const P &predicate, std::stack<std::pair<InnerEntry<P>*, int>> *path) {
+    int curr_nsn = global_nsn;
+    InnerEntry<P> *curEntry = root;
+    int curr_global_nsn = global_nsn;
+    while (true) {
+        path->push(std::make_pair(curEntry, curr_nsn));
         std::vector<Entry<P> *> children = curEntry->getChildren();
         Entry<P> *bestChild = *children.begin();
 
         if (bestChild->getChildren().empty()) {
             break;
+        }
+
+        if (curr_global_nsn < curEntry->getNSN()) {
+            // p = node with smallest insert penalty in rightlink chain delimited by p-NSN;
         }
 
         double bestPenalty = predicate.penalty(bestChild->getPredicate());
@@ -73,17 +80,19 @@ void Gist<P>::locateLeaf(const P &predicate, std::stack<InnerEntry<P>*> *path) {
             }
         }
         curEntry = static_cast<InnerEntry<P>*>(bestChild);
+        curr_nsn = curEntry->getNSN();
+        curr_global_nsn = global_nsn;
     }
 }
 
 template <typename P>
 void Gist<P>::insert(LeafEntry<P> E) {
     P predicate = E.getPredicate();
-    std::stack<InnerEntry<P>*> path;
+    std::stack<std::pair<InnerEntry<P>*, int>> path;
 
     locateLeaf(predicate, &path);
 
-    for (InnerEntry<P> *L = path.top();; L = path.top()) {
+    for (InnerEntry<P> *L = path.top().first;; L = path.top().first) {
         if (L->getChildren().size() < max_fanout) {
             L->insert(E);
             break;
@@ -93,9 +102,13 @@ void Gist<P>::insert(LeafEntry<P> E) {
         L->setChildren(sets.first);
         L->setPredicate(*(new P(L->getSubpredicates())));
         E = *(new InnerEntry<P> (sets.second));
+
+        E->setNSN(L->getNSN());
+        global_nsn++;
+        L->setNSN(global_nsn);
     }
 
-    for (InnerEntry<P>* curEntry = path.top(); !path.empty(); curEntry = path.top()) {
+    for (InnerEntry<P>* curEntry = path.top().first; !path.empty(); curEntry = path.top().first) {
         curEntry->setPredicate(*(new P(curEntry->getSubpredicates())));
         path.pop();
     }

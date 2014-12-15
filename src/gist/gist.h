@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <stack>
+#include <utility>
 
 #include "gist/predicate.h"
 #include "gist/inner_entry.h"
@@ -29,7 +30,7 @@ public:
 
     void deleteEntry(const LeafEntry<P> &e);
 private:
-    void locateLeaf(const P &predicate, std::stack<InnerEntry<P>*> *path);
+    void locateLeaf(const P &predicate, std::stack<std::pair<InnerEntry<P>*, int>> *path);
 };
 
 // this is not good..

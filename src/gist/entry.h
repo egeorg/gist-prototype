@@ -22,4 +22,8 @@ public:
     int getNSN() {
     	return nsn;
     }
+
+    int setNSN(int newNSN) {
+        nsn = newNSN;
+    }
 };
