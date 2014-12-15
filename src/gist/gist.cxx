@@ -54,12 +54,9 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 }
 
 template <typename P>
-void Gist<P>::insert(LeafEntry<P> E) {
-    P predicate = E.getPredicate();
-    std::stack<InnerEntry<P>*> path;
-
+void Gist<P>::locateLeaf(const P &predicate, std::stack<InnerEntry<P>*> *path) {
     for (InnerEntry<P> *curEntry = root;;) {
-        path.push(curEntry);
+        path->push(curEntry);
         std::vector<Entry<P> *> children = curEntry->getChildren();
         Entry<P> *bestChild = *children.begin();
 
@@ -77,6 +74,14 @@ void Gist<P>::insert(LeafEntry<P> E) {
         }
         curEntry = static_cast<InnerEntry<P>*>(bestChild);
     }
+}
+
+template <typename P>
+void Gist<P>::insert(LeafEntry<P> E) {
+    P predicate = E.getPredicate();
+    std::stack<InnerEntry<P>*> path;
+
+    locateLeaf(predicate, &path);
 
     for (InnerEntry<P> *L = path.top();; L = path.top()) {
         if (L->getChildren().size() < max_fanout) {

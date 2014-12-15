@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <stack>
 
 #include "gist/predicate.h"
 #include "gist/inner_entry.h"
@@ -27,6 +28,8 @@ public:
     void insert(LeafEntry<P> E);
 
     void deleteEntry(const LeafEntry<P> &e);
+private:
+    void locateLeaf(const P &predicate, std::stack<InnerEntry<P>*> *path);
 };
 
 // this is not good..
