@@ -32,7 +32,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
         entryStack.pop();
 
         if (curNSN < curEntry -> getNSN()) {
-            // add right-link with curNSN version
+            entryStack.push(std::make_pair(curEntry->getRighEntry(), curNSN));
         }
 
 		std::vector<Entry<P> *> children = curEntry -> getChildren();
@@ -107,9 +107,9 @@ void Gist<P>::insert(LeafEntry<P> E) {
         global_nsn++;
         L->setNSN(global_nsn);
 
-        InnerEntry<P> *lParent = L.getRightNode();
-        L.setRightEntry(&E);
-        E.setRightEntry(lParent);
+        InnerEntry<P> *lParent = L->getRightNode();
+        L->setRightEntry(&E);
+        E->setRightEntry(lParent);
     }
 
     for (InnerEntry<P>* curEntry = path.top().first; !path.empty(); curEntry = path.top().first) {
