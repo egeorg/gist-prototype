@@ -106,6 +106,10 @@ void Gist<P>::insert(LeafEntry<P> E) {
         E->setNSN(L->getNSN());
         global_nsn++;
         L->setNSN(global_nsn);
+
+        InnerEntry<P> *lParent = L.getRightNode();
+        L.setRightEntry(&E);
+        E.setRightEntry(lParent);
     }
 
     for (InnerEntry<P>* curEntry = path.top().first; !path.empty(); curEntry = path.top().first) {
