@@ -31,7 +31,9 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
         entryStack.pop();
 
         if (curNSN < curEntry->getNSN()) {
-            entryStack.push(std::make_pair(curEntry->getRightEntry(), curNSN));
+            if (curEntry->getRightEntry() != nullptr) {
+                entryStack.push(std::make_pair(curEntry->getRightEntry(), curNSN));
+            }
         }
 
         std::vector<Entry<P> *> children = curEntry->getChildren();
