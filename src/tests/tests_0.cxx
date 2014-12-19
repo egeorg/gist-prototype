@@ -17,9 +17,9 @@ TEST(UnitTests, BasicSearchingInGist) {
     g.search(*data.getPredicate());
 }
 
-//TEST(UnitTests, BasicInsertingInGist) {
-//    Gist<DummyPredicate> g(8, 16);
-//    LeafEntry<DummyPredicate> data = LeafEntry<DummyPredicate>();
-//    g.insert(data);
-//}
+TEST(UnitTests, BasicInsertingInGist) {
+    Gist<DummyPredicate> g(8, 16);
+    LeafEntry<DummyPredicate> data = LeafEntry<DummyPredicate>();
+    g.insert(data);
+}
 

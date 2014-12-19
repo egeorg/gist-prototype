@@ -17,7 +17,7 @@ public:
 
     InnerEntry<P> (std::vector<Entry<P> *> entries) {
         node = new Node<P>(entries);
-        this->predicate = *(new P(getSubpredicates()));
+        this->predicate = new P(getSubpredicates());
     }
 
     std::vector<Entry<P> *> getChildren() {
@@ -48,7 +48,8 @@ public:
     }
 
     void insert(const Entry<P> &E) {
+//        TODO: uncomment and fix!
 //        E.setParent(this);
-        node->insert(E);
+//        node->insert(E);
     }
 };

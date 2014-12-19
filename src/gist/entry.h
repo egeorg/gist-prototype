@@ -5,8 +5,9 @@
 
 template <typename P>
 class Entry : public PredicateHolder<P> {
-private:
+protected:
     P *predicate;
+private:
     int nsn;
     Entry<P> *rightEntry;
 public:
