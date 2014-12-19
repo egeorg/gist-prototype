@@ -19,7 +19,7 @@ public:
 
     bool consistentWith(const DummyPredicate &p) const;
 
-    double penalty(const DummyPredicate &p);
+    double penalty(const DummyPredicate &p) const;
 
     static std::pair<DPVector, DPVector> pickSplit(const DPVector &p);
 };

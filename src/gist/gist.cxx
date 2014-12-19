@@ -71,12 +71,12 @@ void Gist<P>::locateLeaf(const P &predicate, std::stack<std::pair<InnerEntry<P>*
             // p = node with smallest insert penalty in rightlink chain delimited by p-NSN;
         }
 
-        double bestPenalty = predicate.penalty(bestChild->getPredicate());
-        for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
-            double curPenalty = predicate.penalty(static_cast<InnerEntry<P>*>(*child)->getPredicate());
+        double bestPenalty = predicate.penalty(*(bestChild->getPredicate()));
+        for (auto child : children) {
+            double curPenalty = predicate.penalty(*(child->getPredicate()));
             if (curPenalty < bestPenalty) {
                 bestPenalty = curPenalty;
-                bestChild = *child;
+                bestChild = child;
             }
         }
         curEntry = static_cast<InnerEntry<P>*>(bestChild);
@@ -108,22 +108,22 @@ void Gist<P>::insert(LeafEntry<P> E) {
             break;
         }
         path.pop();
-        std::pair<std::vector<PredicateHolder<P>*>, std::vector<PredicateHolder<P>*>> sets = E.getPredicate()->pickSplit(L->getSubpredicates());
+        std::pair<std::vector<PredicateHolder<P>*>, std::vector<PredicateHolder<P>*>> sets = E.getPredicate()->pickSplit(L->getSubpredicateHolders());
         L->setChildren(covariant_cast(sets.first));
-        L->setPredicate(*(new P(L->getSubpredicates())));
-        E = *(new InnerEntry<P> (sets.second));
+        L->setPredicate(new P(L->getSubpredicates()));
+        InnerEntry<P> nE = *(new InnerEntry<P> (covariant_cast(sets.second)));
 
-        E.setNSN(L->getNSN());
+        nE.setNSN(L->getNSN());
         global_nsn++;
         L->setNSN(global_nsn);
 
         Entry<P> *lParent = L->getRightEntry();
-        L->setRightEntry(&E);
-        E.setRightEntry(lParent);
+        L->setRightEntry(&nE);
+        nE.setRightEntry(lParent);
     }
 
     for (InnerEntry<P>* curEntry = path.top().first; !path.empty(); curEntry = path.top().first) {
-        curEntry->setPredicate(*(new P(curEntry->getSubpredicates())));
+        curEntry->setPredicate(new P(curEntry->getSubpredicates()));
         path.pop();
     }
 }

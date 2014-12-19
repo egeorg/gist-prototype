@@ -13,7 +13,7 @@ bool DummyPredicate::consistentWith(const DummyPredicate &p) const {
     return true;
 }
 
-double DummyPredicate::penalty(const DummyPredicate &p) {
+double DummyPredicate::penalty(const DummyPredicate &p) const {
     return 0.0;
 }
 

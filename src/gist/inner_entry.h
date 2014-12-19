@@ -24,11 +24,20 @@ public:
         return node->getEntries();
     }
 
-    std::vector<PredicateHolder<P>*> getSubpredicates() {
+    std::vector<PredicateHolder<P>*> getSubpredicateHolders() {
         std::vector<Entry<P> *> children = getChildren();
         std::vector<PredicateHolder<P>*> result;
         for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
             result.push_back(new PredicateHolder<P>((*child) -> getPredicate()));
+        }
+        return result;
+    }
+
+    std::vector<P*> getSubpredicates() {
+        std::vector<Entry<P> *> children = getChildren();
+        std::vector<P*> result;
+        for (auto child : children) {
+            result.push_back(child->getPredicate());
         }
         return result;
     }
@@ -39,7 +48,7 @@ public:
     }
 
     void insert(const Entry<P> &E) {
-        E.setParent(this);
+//        E.setParent(this);
         node->insert(E);
     }
 };
