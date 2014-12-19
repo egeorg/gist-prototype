@@ -9,6 +9,7 @@ class LeafEntry : public Entry<P> {
 private:
     void* data;
 
+private:
     std::vector<Entry<P> *> getChildren() {
 		return std::vector<Entry<P> *> ();
 	}
