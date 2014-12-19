@@ -32,7 +32,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
         entryStack.pop();
 
         if (curNSN < curEntry -> getNSN()) {
-            entryStack.push(std::make_pair(curEntry->getRighEntry(), curNSN));
+            entryStack.push(std::make_pair(curEntry->getRightEntry(), curNSN));
         }
 
 		std::vector<Entry<P> *> children = curEntry -> getChildren();
@@ -44,7 +44,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 		
         int curr_global_nsn = global_nsn;
 		for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
-			if (predicate.consistentWith((*child) -> getPredicate())) {
+			if (predicate.consistentWith(*((*child) -> getPredicate()))) {
 				entryStack.push(std::make_pair(*child, curr_global_nsn));
 			}
 		}
@@ -87,7 +87,7 @@ void Gist<P>::locateLeaf(const P &predicate, std::stack<std::pair<InnerEntry<P>*
 
 template <typename P>
 void Gist<P>::insert(LeafEntry<P> E) {
-    P predicate = E.getPredicate();
+    P predicate = *(E.getPredicate());
     std::stack<std::pair<InnerEntry<P>*, int>> path;
 
     locateLeaf(predicate, &path);
@@ -98,18 +98,18 @@ void Gist<P>::insert(LeafEntry<P> E) {
             break;
         }
         path.pop();
-        std::pair<std::vector<P &>, std::vector<P &> > sets = E.getPredicate().pickSplit(L->getSubpredicates());
+        std::pair<std::vector<PredicateHolder<P>*>, std::vector<PredicateHolder<P>*>> sets = E.getPredicate()->pickSplit(L->getSubpredicates());
         L->setChildren(sets.first);
         L->setPredicate(*(new P(L->getSubpredicates())));
         E = *(new InnerEntry<P> (sets.second));
 
-        E->setNSN(L->getNSN());
+        E.setNSN(L->getNSN());
         global_nsn++;
         L->setNSN(global_nsn);
 
-        InnerEntry<P> *lParent = L->getRightNode();
+        Entry<P> *lParent = L->getRightEntry();
         L->setRightEntry(&E);
-        E->setRightEntry(lParent);
+        E.setRightEntry(lParent);
     }
 
     for (InnerEntry<P>* curEntry = path.top().first; !path.empty(); curEntry = path.top().first) {

@@ -24,11 +24,11 @@ public:
         return node->getEntries();
     }
 
-    std::vector<P*> getSubpredicates() {
+    std::vector<PredicateHolder<P>*> getSubpredicates() {
         std::vector<Entry<P> *> children = getChildren();
-        std::vector<P*> result;
+        std::vector<PredicateHolder<P>*> result;
         for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
-            result.push_back((*child) -> getPredicate());
+            result.push_back(new PredicateHolder<P>((*child) -> getPredicate()));
         }
         return result;
     }

@@ -1,6 +1,6 @@
 #include "gist/predicates/dummy_predicate.h"
 
-DummyPredicate::DummyPredicate(const std::vector<DummyPredicate &> &p) {
+DummyPredicate::DummyPredicate(const std::vector<DummyPredicate *> &p) {
 }
 
 DummyPredicate::DummyPredicate(const std::vector<void *> &data) {
@@ -9,7 +9,7 @@ DummyPredicate::DummyPredicate(const std::vector<void *> &data) {
 DummyPredicate::~DummyPredicate() {
 }
 
-bool DummyPredicate::consistentWith(const DummyPredicate &p) {
+bool DummyPredicate::consistentWith(const DummyPredicate &p) const {
     return true;
 }
 

@@ -8,6 +8,7 @@ class Entry : public PredicateHolder<P> {
 private:
     P *predicate;
     int nsn;
+    Entry<P> *rightEntry;
 public:
     void setPredicate(P *predicate) {
         this->predicate = predicate;
@@ -25,5 +26,13 @@ public:
 
     int setNSN(int newNSN) {
         nsn = newNSN;
+    }
+
+    Entry<P>* getRightEntry() {
+        return rightEntry;
+    }
+
+    void setRightEntry(Entry<P> *rightEntry) {
+        this->rightEntry = rightEntry;
     }
 };

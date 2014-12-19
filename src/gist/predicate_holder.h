@@ -4,6 +4,17 @@
 
 template <typename P>
 class PredicateHolder {
+private:
+    P* predicate;
 public:
-    virtual P *getPredicate() const = 0;
+    PredicateHolder() {
+    }
+
+    PredicateHolder(P *predicate) {
+        this->predicate = predicate;
+    }
+
+    P *getPredicate() const {
+        return predicate;
+    }
 };

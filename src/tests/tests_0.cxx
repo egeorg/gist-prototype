@@ -10,3 +10,16 @@ TEST(UnitTests, SampleTest) {
 TEST(UnitTests, CreatingGistInstance) {
     Gist<DummyPredicate> g(8, 16);
 }
+
+TEST(UnitTests, BasicSearchingInGist) {
+    Gist<DummyPredicate> g(8, 16);
+    LeafEntry<DummyPredicate> data = LeafEntry<DummyPredicate>();
+    g.search(*data.getPredicate());
+}
+
+//TEST(UnitTests, BasicInsertingInGist) {
+//    Gist<DummyPredicate> g(8, 16);
+//    LeafEntry<DummyPredicate> data = LeafEntry<DummyPredicate>();
+//    g.insert(data);
+//}
+
