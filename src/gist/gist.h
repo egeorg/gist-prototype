@@ -31,6 +31,8 @@ public:
     void deleteEntry(const LeafEntry<P> &e);
 private:
     void locateLeaf(const P &predicate, std::stack<std::pair<InnerEntry<P>*, int>> *path);
+
+    std::vector<Entry<P>*> covariant_cast(const std::vector<PredicateHolder<P>*> &p);
 };
 
 // this is not good..

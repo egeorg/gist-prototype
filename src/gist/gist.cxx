@@ -86,6 +86,16 @@ void Gist<P>::locateLeaf(const P &predicate, std::stack<std::pair<InnerEntry<P>*
 }
 
 template <typename P>
+std::vector<Entry<P>*> Gist<P>::covariant_cast(const std::vector<PredicateHolder<P>*> &p) {
+    std::vector<Entry<P>*> result;
+    for (auto holder : p) {
+        result.push_back(static_cast<Entry<P> *>(holder));
+    }
+
+    return result;
+}
+
+template <typename P>
 void Gist<P>::insert(LeafEntry<P> E) {
     P predicate = *(E.getPredicate());
     std::stack<std::pair<InnerEntry<P>*, int>> path;
@@ -99,7 +109,7 @@ void Gist<P>::insert(LeafEntry<P> E) {
         }
         path.pop();
         std::pair<std::vector<PredicateHolder<P>*>, std::vector<PredicateHolder<P>*>> sets = E.getPredicate()->pickSplit(L->getSubpredicates());
-        L->setChildren(sets.first);
+        L->setChildren(covariant_cast(sets.first));
         L->setPredicate(*(new P(L->getSubpredicates())));
         E = *(new InnerEntry<P> (sets.second));
 
