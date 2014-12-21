@@ -30,11 +30,11 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
         int curNSN = entryStack.top().second;
         entryStack.pop();
 
-        if (curNSN < curEntry->getNSN()) {
+        /*if (curNSN < curEntry->getNSN()) {
             if (curEntry->getRightEntry() != nullptr) {
                 entryStack.push(std::make_pair(curEntry->getRightEntry(), curNSN));
             }
-        }
+        }*/
 
         std::vector<Entry<P> *> children = curEntry->getChildren();
 
@@ -55,7 +55,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 }
 
 template <typename P>
-void Gist<P>::locateLeaf(const P &predicate, std::stack<std::pair<InnerEntry<P>*, int>> *path) {
+void Gist<P>::chooseSubtree(const P &predicate, std::stack<std::pair<InnerEntry<P>*, int>> *path) {
     int curr_nsn = global_nsn;
     InnerEntry<P> *curEntry = root;
     int curr_global_nsn = global_nsn;
@@ -105,7 +105,7 @@ void Gist<P>::insert(LeafEntry<P> E) {
     P predicate = *(E.getPredicate());
     std::stack<std::pair<InnerEntry<P>*, int>> path;
 
-    locateLeaf(predicate, &path);
+    chooseSubtree(predicate, &path);
 
     std::stack<std::pair<InnerEntry<P> *, int>> copiedPath(path);
 
