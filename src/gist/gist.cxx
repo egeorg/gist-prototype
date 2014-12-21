@@ -101,13 +101,11 @@ std::vector<Entry<P>*> Gist<P>::covariant_cast(const std::vector<PredicateHolder
 }
 
 template <typename P>
-void Gist<P>::insert(LeafEntry<P> E) {
+void Gist<P>::insert(Entry<P> E) {
     P predicate = *(E.getPredicate());
     std::stack<std::pair<InnerEntry<P>*, int>> path;
 
     chooseSubtree(predicate, &path);
-
-    std::stack<std::pair<InnerEntry<P> *, int>> copiedPath(path);
 
     while (!path.empty()) {
         InnerEntry<P> *L = path.top().first;
@@ -119,21 +117,20 @@ void Gist<P>::insert(LeafEntry<P> E) {
         std::pair<std::vector<PredicateHolder<P>*>, std::vector<PredicateHolder<P>*>> sets = E.getPredicate()->pickSplit(L->getSubpredicateHolders());
         L->setChildren(covariant_cast(sets.first));
         L->setPredicate(new P(L->getSubpredicates()));
-        InnerEntry<P> nE = *(new InnerEntry<P> (covariant_cast(sets.second)));
+        E = *(new InnerEntry<P> (covariant_cast(sets.second)));
 
-        nE.setNSN(L->getNSN());
+        E.setNSN(L->getNSN());
         global_nsn++;
         L->setNSN(global_nsn);
 
-        Entry<P> *lParent = L->getRightEntry();
-        L->setRightEntry(&nE);
-        nE.setRightEntry(lParent);
+        InnerEntry<P> *lParent = L->getRightEntry();
+        L->setRightEntry(&E);
+        E.setRightEntry(lParent);
     }
 
-    while (!copiedPath.empty()) {
-        InnerEntry<P> *curEntry = copiedPath.top().first;
-        curEntry->setPredicate(new P(curEntry->getSubpredicates()));
-        copiedPath.pop();
+    for (InnerEntry<P>* curEntry = path.top(); !path.empty(); curEntry = path.top()) {
+        curEntry->setPredicate(*(new P(curEntry->getSubpredicates())));
+        path.pop();
     }
 }
 

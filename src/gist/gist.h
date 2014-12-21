@@ -26,7 +26,7 @@ public:
 
     std::vector<LeafEntry<P> *> search(const P &p) const;
 
-    void insert(LeafEntry<P> E);
+    void insert(Entry<P> E);
 
     void deleteEntry(const LeafEntry<P> &e);
 private:
