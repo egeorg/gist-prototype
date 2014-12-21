@@ -31,11 +31,11 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
         int curNSN = entryStack.top().second;
         entryStack.pop();
 
-        /*if (curNSN < curEntry->getNSN()) {
+        if (curNSN < curEntry->getNSN()) {
             if (curEntry->getRightEntry() != nullptr) {
                 entryStack.push(std::make_pair(curEntry->getRightEntry(), curNSN));
             }
-        }*/
+        }
 
         std::vector<Entry<P> *> children = curEntry->getChildren();
 
@@ -102,8 +102,9 @@ std::vector<Entry<P>*> Gist<P>::covariant_cast(const std::vector<PredicateHolder
 }
 
 template <typename P>
-void Gist<P>::insert(Entry<P> E) {
-    P predicate = *(E.getPredicate());
+void Gist<P>::insert(LeafEntry<P> E) {
+    Entry<P> *S = static_cast<Entry<P>*>(&E);
+    P predicate = *(S->getPredicate());
     std::stack<std::pair<InnerEntry<P>*, int>> path;
 
     chooseSubtree(predicate, &path);
@@ -111,26 +112,26 @@ void Gist<P>::insert(Entry<P> E) {
     while (!path.empty()) {
         InnerEntry<P> *L = path.top().first;
         if (L->getChildren().size() < max_fanout) {
-            L->insert(&E);
+            L->insert(S);
             break;
         }
         path.pop();
-        std::pair<std::vector<PredicateHolder<P>*>, std::vector<PredicateHolder<P>*>> sets = E.getPredicate()->pickSplit(L->getSubpredicateHolders());
+        std::pair<std::vector<PredicateHolder<P>*>, std::vector<PredicateHolder<P>*>> sets = S->getPredicate()->pickSplit(L->getSubpredicateHolders());
         L->setChildren(covariant_cast(sets.first));
         L->setPredicate(new P(L->getSubpredicates()));
-        E = *(new InnerEntry<P> (covariant_cast(sets.second)));
+        S = new InnerEntry<P> (covariant_cast(sets.second));
 
-        E.setNSN(L->getNSN());
+        S->setNSN(L->getNSN());
         global_nsn++;
         L->setNSN(global_nsn);
 
-        InnerEntry<P> *lParent = L->getRightEntry();
-        L->setRightEntry(&E);
-        E.setRightEntry(lParent);
+        Entry<P> *lParent = L->getRightEntry();
+        L->setRightEntry(S);
+        S->setRightEntry(lParent);
     }
 
-    for (InnerEntry<P>* curEntry = path.top(); !path.empty(); curEntry = path.top()) {
-        curEntry->setPredicate(*(new P(curEntry->getSubpredicates())));
+    for (InnerEntry<P>* curEntry = path.top().first; !path.empty(); curEntry = path.top().first) {
+        curEntry->setPredicate(new P(curEntry->getSubpredicates()));
         path.pop();
     }
 }

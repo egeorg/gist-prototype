@@ -2,6 +2,7 @@
 
 #include "gist/predicate.h"
 #include "gist/predicate_holder.h"
+#include "gist/shared_mutex.h"
 
 template <typename P>
 class Entry : public PredicateHolder<P> {
@@ -28,7 +29,7 @@ public:
     	return nsn;
     }
 
-    int setNSN(int newNSN) {
+    void setNSN(int newNSN) {
         nsn = newNSN;
     }
 
