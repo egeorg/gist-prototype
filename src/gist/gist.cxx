@@ -9,7 +9,7 @@ Gist<P>::Gist(int u, int l) {
     max_fanout = u;
     min_fanout = l;
     global_nsn = 1;
-    root = new InnerEntry<P>(max_fanout);
+    root = new InnerEntry<P>(global_nsn);
 }
 
 template <typename P>
@@ -27,6 +27,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 	entryStack.push(std::make_pair(root, global_nsn));
 	while (!entryStack.empty()) {
         Entry<P> *curEntry = entryStack.top().first;
+
         int curNSN = entryStack.top().second;
         entryStack.pop();
 

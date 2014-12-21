@@ -10,14 +10,18 @@ class InnerEntry : public Entry<P> {
 private:
     Node<P> *node;
 public:
-    InnerEntry<P> (int size) {
+    InnerEntry<P> (int global_nsn) {
         node = new Node<P>(std::vector<Entry<P> *>());
+        this->rightEntry = nullptr;
+        this->nsn = global_nsn;
 //        this->predicate = *(new P()); // TODO: Predicates should not be constructed this way
     }
 
     InnerEntry<P> (std::vector<Entry<P> *> entries) {
         node = new Node<P>(entries);
         this->predicate = new P(getSubpredicates());
+        this->rightEntry = nullptr;
+        this->nsn = 0;
     }
 
     std::vector<Entry<P> *> getChildren() {

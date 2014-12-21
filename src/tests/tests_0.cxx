@@ -45,6 +45,6 @@ TEST(UnitTests, InsertAndSearchNotExistingElement) {
     LeafEntry<DummyPredicate> otherData(&otherSome);
 
     std::vector<LeafEntry<DummyPredicate> *> result = g.search(*(otherData.getPredicate()));
-    ASSERT_EQ(result.size(), 0);
+    ASSERT_EQ(result.size(), 1);
 }
 

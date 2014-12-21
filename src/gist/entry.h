@@ -7,10 +7,13 @@ template <typename P>
 class Entry : public PredicateHolder<P> {
 protected:
     P *predicate;
-private:
-    int nsn;
     Entry<P> *rightEntry;
+    int nsn;
 public:
+    Entry() {
+        this->rightEntry = nullptr;
+    }
+
     void setPredicate(P *predicate) {
         this->predicate = predicate;
     }
