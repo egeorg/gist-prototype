@@ -23,9 +23,9 @@ Gist<P>::~Gist() {
 template <typename P>
 std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
     std::vector<LeafEntry<P> *> result;
-	std::stack<std::pair<Entry<P> *, int>> entryStack;
-	entryStack.push(std::make_pair(root, global_nsn));
-	while (!entryStack.empty()) {
+    std::stack<std::pair<Entry<P> *, int>> entryStack;
+    entryStack.push(std::make_pair(root, global_nsn));
+    while (!entryStack.empty()) {
         Entry<P> *curEntry = entryStack.top().first;
         std::lock_guard<std::recursive_mutex> lock(*curEntry->getMutex());
 
@@ -53,7 +53,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
         }
     }
 
-	return result;
+    return result;
 }
 
 template <typename P>
