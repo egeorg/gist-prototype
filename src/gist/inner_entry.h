@@ -10,36 +10,49 @@ class InnerEntry : public Entry<P> {
 private:
     Node<P> *node;
 public:
-    InnerEntry<P> () {
+    InnerEntry<P> (int global_nsn) {
         node = new Node<P>(std::vector<Entry<P> *>());
+        this->rightEntry = nullptr;
+        this->nsn = global_nsn;
 //        this->predicate = *(new P()); // TODO: Predicates should not be constructed this way
     }
 
     InnerEntry<P> (std::vector<Entry<P> *> entries) {
         node = new Node<P>(entries);
-        this->predicate = *(new P(getSubpredicates()));
+        this->predicate = new P(getSubpredicates());
+        this->rightEntry = nullptr;
+        this->nsn = 0;
     }
 
     std::vector<Entry<P> *> getChildren() {
         return node->getEntries();
     }
 
-	std::vector<P*> getSubpredicates() {
-		std::vector<Entry<P> *> children = getChildren();
-		std::vector<P*> result;
-		for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
-			result.push_back((*child) -> getPredicate());
-		}
-		return result;
-	}
+    std::vector<PredicateHolder<P>*> getSubpredicateHolders() {
+        std::vector<Entry<P> *> children = getChildren();
+        std::vector<PredicateHolder<P>*> result;
+        for (typename std::vector<Entry<P> *>::iterator child = children.begin(); child != children.end(); ++child) {
+            result.push_back(new PredicateHolder<P>((*child) -> getPredicate()));
+        }
+        return result;
+    }
+
+    std::vector<P*> getSubpredicates() {
+        std::vector<Entry<P> *> children = getChildren();
+        std::vector<P*> result;
+        for (auto child : children) {
+            result.push_back(child->getPredicate());
+        }
+        return result;
+    }
 
     void setChildren (std::vector<Entry<P> *> entries) {
         node->setEntries(entries);
         //predicate = *(new P(this->getSubpredicates()));
     }
 
-    void insert(const Entry<P> &E) {
-        E.setParent(this);
+    void insert(Entry<P> *E) {
+//        TODO: uncomment and fix!
         node->insert(E);
     }
 };

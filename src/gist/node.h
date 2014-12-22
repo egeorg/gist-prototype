@@ -8,7 +8,6 @@ template <typename P>
 class Node {
 private:
     std::vector<Entry<P> *> entries;
-
 public:
     Node (std::vector<Entry<P> *> entries) {
         this->entries = entries;
@@ -21,7 +20,7 @@ public:
         this->entries = entries;
     }
 
-    void insert(const Entry<P> &E) {
+    void insert(Entry<P> *E) {
         entries.push_back(E);
     }
 };

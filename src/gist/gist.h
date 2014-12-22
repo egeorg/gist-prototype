@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <stack>
+#include <utility>
 
 #include "gist/predicate.h"
 #include "gist/inner_entry.h"
@@ -12,6 +14,7 @@ class Gist {
 private:
     int max_fanout;
     int min_fanout;
+    int global_nsn;
     InnerEntry<P> *root;
 
     //InnerEntry<P> chooseSubtree(LeafEntry<P> const &E);
@@ -26,6 +29,10 @@ public:
     void insert(LeafEntry<P> E);
 
     void deleteEntry(const LeafEntry<P> &e);
+private:
+    void chooseSubtree(const P &predicate, std::stack<std::pair<InnerEntry<P>*, int>> *path);
+
+    std::vector<Entry<P>*> covariant_cast(const std::vector<PredicateHolder<P>*> &p);
 };
 
 // this is not good..
