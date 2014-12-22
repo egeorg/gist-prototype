@@ -27,6 +27,7 @@ std::vector<LeafEntry<P> *> Gist<P>::search(const P &predicate) const {
 	entryStack.push(std::make_pair(root, global_nsn));
 	while (!entryStack.empty()) {
         Entry<P> *curEntry = entryStack.top().first;
+        std::lock_guard<std::recursive_mutex> lock(*curEntry->getMutex());
 
         int curNSN = entryStack.top().second;
         entryStack.pop();
@@ -62,6 +63,8 @@ void Gist<P>::chooseSubtree(const P &predicate, std::stack<std::pair<InnerEntry<
     int curr_global_nsn = global_nsn;
     while (true) {
         path->push(std::make_pair(curEntry, curr_nsn));
+        std::lock_guard<std::recursive_mutex> lockCurEntry(*curEntry->getMutex());
+
         std::vector<Entry<P> *> children = curEntry->getChildren();
         if (children.size() == 0) {
             break;
@@ -79,6 +82,8 @@ void Gist<P>::chooseSubtree(const P &predicate, std::stack<std::pair<InnerEntry<
 
         double bestPenalty = predicate.penalty(*(bestChild->getPredicate()));
         for (auto child : children) {
+            std::lock_guard<std::recursive_mutex> lockChild(*child->getMutex());
+
             double curPenalty = predicate.penalty(*(child->getPredicate()));
             if (curPenalty < bestPenalty) {
                 bestPenalty = curPenalty;
@@ -111,6 +116,8 @@ void Gist<P>::insert(LeafEntry<P> E) {
 
     while (!path.empty()) {
         InnerEntry<P> *L = path.top().first;
+        std::lock_guard<std::recursive_mutex> lockL(*L->getMutex());
+
         if (L->getChildren().size() < max_fanout) {
             L->insert(S);
             break;
@@ -130,7 +137,8 @@ void Gist<P>::insert(LeafEntry<P> E) {
         S->setRightEntry(lParent);
     }
 
-    for (InnerEntry<P>* curEntry = path.top().first; !path.empty(); curEntry = path.top().first) {
+    while (!path.empty()) {
+        InnerEntry<P> *curEntry = path.top().first;
         curEntry->setPredicate(new P(curEntry->getSubpredicates()));
         path.pop();
     }

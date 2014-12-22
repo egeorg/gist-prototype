@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "gist/entry.h"
-#include "gist/shared_mutex.h"
 
 template <typename P>
 class LeafEntry : public Entry<P> {

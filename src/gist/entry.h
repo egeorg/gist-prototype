@@ -2,7 +2,8 @@
 
 #include "gist/predicate.h"
 #include "gist/predicate_holder.h"
-#include "gist/shared_mutex.h"
+#include <mutex>
+
 
 template <typename P>
 class Entry : public PredicateHolder<P> {
@@ -10,9 +11,11 @@ protected:
     P *predicate;
     Entry<P> *rightEntry;
     int nsn;
+    std::recursive_mutex *mutex;
 public:
     Entry() {
         this->rightEntry = nullptr;
+        this->mutex = new std::recursive_mutex();
     }
 
     void setPredicate(P *predicate) {
@@ -39,5 +42,9 @@ public:
 
     void setRightEntry(Entry<P> *rightEntry) {
         this->rightEntry = rightEntry;
+    }
+
+    std::recursive_mutex* getMutex() {
+        return mutex;
     }
 };
